@@ -1,0 +1,394 @@
+<template>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <section id="pupilsClasses" class="col-lg-9 col-sm-12">
+                    <!--list classes here-->
+                    <div class="row">
+                        <!-- all livestream NOW -->
+
+                        <div
+                            v-if="livestreams != undefined"
+                            class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4"
+                            v-for="livest in livestreams"
+                            :key="livest.title + '-' + livest.id"
+                        >
+                            <div class="card h-100">
+                                <div class="streaming">
+                                    <i class="icon streaming-offline"></i>
+                                </div>
+
+                                <img
+                                    :src="
+                                        '/images/' +
+                                            livest.subjectTitle +
+                                            '.png'
+                                    "
+                                    class="card-img-top"
+                                    alt=""
+                                />
+
+                                <div
+                                    class="card-body d-flex justify-content-between flex-column"
+                                >
+                                    <h5 class="card-title mb-3">
+                                        {{ livest.title }}
+                                    </h5>
+                                    <button
+                                        class="btn btn-secondary btn-lg btn-block"
+                                        disabled
+                                        @click="startLiveClass(livest.id)"
+                                    >
+                                        Join Live
+                                        Class
+                                    </button>
+                                </div>
+
+                                <div class="card-footer">
+                                    <small class="text-muted"
+                                        >{{ livest.startDate | formatdate }}
+                                        {{
+                                            livest.startTime | formatTime
+                                        }}</small
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- all livestream scheduled classes -->
+                        <div
+                            class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4"
+                            v-for="schtoday in schedtoday"
+                            :key="schtoday.id"
+                        >
+                            <div class="card h-100">
+                                <div class="streaming">
+                                    <i class="icon streaming-offline"></i>
+                                </div>
+
+                                <img
+                                    :src="
+                                        '/images/' +
+                                            schtoday.subjectTitle +
+                                            '.png'
+                                    "
+                                    class="card-img-top"
+                                    alt=""
+                                />
+
+                                <div
+                                    class="card-body d-flex justify-content-between flex-column"
+                                >
+                                    <h5 class="card-title mb-3">
+                                        {{ schtoday.subject.title }}
+                                    </h5>
+                                    <button
+                                        class="btn btn-secondary btn-lg btn-block disabled"
+                                        @click="startLiveClass(schtoday.id)"
+                                    >
+                                        Join Live Class
+                                    </button>
+                                </div>
+
+                                <div class="card-footer">
+                                    <small class="text-muted"
+                                        >{{ schtoday.startDate | formatdate }}
+                                        {{
+                                            schtoday.startTime | formatTime
+                                        }}</small
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- other not shceduled classes here -->
+                        <div
+                            v-for="classx in classesxx"
+                            :key="classx.title + '-' + classx.id"
+                            class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4"
+                        >
+                            <div class="card h-100">
+                                <img
+                                    :src="
+                                        '/images/' +
+                                            classx.subjectTitle +
+                                            '.png'
+                                    "
+                                    class="card-img-top"
+                                    alt=""
+                                />
+
+                                <div
+                                    class="card-body d-flex justify-content-between flex-column"
+                                >
+                                    <h5 class="card-title mb-3">
+                                        {{ classx.classTitle }}
+                                    </h5>
+                                    <p></p>
+                                    <button
+                                        href="#"
+                                        @click="startClass(classx.id)"
+                                        class="btn btn-primary btn-lg btn-block"
+                                    >
+                                        Start Class
+                                    </button>
+                                </div>
+
+                                <div class="card-footer">
+                                    <small class="text-muted">{{
+                                        classx.submissionDate | formatSubmitDate
+                                    }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end classes-->
+                </section>
+
+                <!--marked work-->
+                <section id="pupilsMarkedWorkList" class="col-lg-3 col-sm-12">
+                    <div class="card-list">
+                        <div class="card-list-head">
+                            <h6>Marked Work</h6>
+                        </div>
+
+                        <div class="scroll-element">
+                            <div
+                                v-if="marklist.length > 0"
+                                class="subject-list list-group"
+                            >
+                                <div v-for="ans in marklist" :key="ans.id">
+                                    <!-- <router-link :to="{name: 'feedback', query: { answer_id: ans.id }}" :class="'list-group-item list-group-item-action '+ans.subject.title">
+                                      <span></span>{{ans.classx.title}}
+                                    </router-link> -->
+
+                                    <button
+                                        type="button"
+                                        :class="
+                                            'list-group-item list-group-item-action ' +
+                                                ans.subject.title
+                                        "
+                                        @click="getFeedback(ans.id)"
+                                    >
+                                        <span></span>{{ ans.classx.title }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div v-else class="subject-list list-group">
+                                <span class="badge badge-danger"
+                                    >No marked work at the moment!</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--end marked work-->
+                <!--end row-->
+            </div>
+        </div>
+    </section>
+</template>
+
+<script>
+// import Techclass from '@/components/Techclass.vue';
+import moment from "moment";
+
+export default {
+    // components: {
+    //     Techclass,
+    // },
+    computed: {},
+
+    filters: {
+        formatdate: function(value) {
+            if (value) {
+                // return moment(String(value)).format('LL')
+                // rehashed to display today or tomorrow
+                var today = moment(new Date()).format("YYYY-MM-DD");
+                var sdate = moment(value).format("YYYY-MM-DD");
+                if (sdate == today) {
+                    return "Today @";
+                } else if (sdate > today) {
+                    return "Tomorrow @";
+                } else {
+                    return moment(String(value)).format("LL");
+                }
+            }
+        },
+
+        formatTime: function(value) {
+            if (value) {
+                return moment(String(value), "hh:mm a").format("hh:mm a");
+            }
+        },
+
+        formatSubmitDate: function(value) {
+            return moment(String(value)).format("LL");
+        }
+    },
+
+    data() {
+        return {
+            userInfo: {},
+            reminderLiveStream: false,
+            classesxx: [],
+            classesraw: {},
+            classesDraft: [],
+            livestreams: [],
+            schedtoday: [],
+            livest: [],
+            marklist: [],
+            subjects: {}
+        };
+    },
+
+    mounted() {
+        this.onInit();
+    },
+
+    methods: {
+        onInit() {
+            // This api is to get live class
+            axios
+                .get("/api/getStudentClasses", { withCredentials: true })
+                .then(res => {
+                    console.log("classes-", res);
+                    this.classesraw = res.data.classes;
+                    this.userInfo = res.data.student;
+                    this.classesxx = [];
+
+                    res.data.classes.forEach(element => {
+                        let x = element.subject;
+
+                        if (x != undefined) {
+                            x.classTitle = element.title;
+                            x.subjectTitle = x.title.replace(
+                                /[^a-z0-9]/gi,
+                                "-"
+                            );
+                            x.submissionDate = element.submissionDate;
+                        }
+
+                        this.classesxx.push(x);
+                    });
+
+                    this.getLiveStreams();
+                    this.getMarkedWork();
+                })
+                .catch(err => {
+                    console.log("get-classes-err", err);
+                });
+        },
+
+        getMarkedWork() {
+            // this method pulls all the students answer list
+            axios.post("/api/getAnswList").then(res => {
+                console.log("answer-list", res);
+                this.subjects = res.data.subjects;
+
+                res.data.answer.forEach(element => {
+                    element.classTitle = element.classx.title;
+                    element.subject_id = element.classx.subject_id;
+                    this.marklist.push(element);
+                });
+            });
+        },
+
+        getLiveStreams() {
+            //this method gets all teh live streamsms
+            axios
+                .get("/api/getLiveStreams", { withCredentials: true })
+                .then(res => {
+                    console.log("streams-", res);
+                    // this.livestreams = res.data.liveNow;
+                    // this.schedtoday = res.data.schedToday;
+
+                    if (res.data.liveNow.length != undefined) {
+                        res.data.liveNow.forEach(element => {
+                            element.subjectTitle = element.subject.title;
+                            this.livestreams.push(element);
+                        });
+                    }
+                    if (res.data.schedToday.length != undefined) {
+                        res.data.schedToday.forEach(element => {
+                            element.subjectTitle = element.subject.title;
+                            this.schedtoday.push(element);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log("err-live-stream-get", err);
+                });
+        },
+
+        getTeacherClasses() {
+            this.$axios
+                .get("/api/getTeacherClasses", {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Content-Type": "multipart/form-data"
+                    },
+                    withCredentials: true
+                })
+                .then(response => {
+                    console.log("res-data", response);
+
+                    response.data.classDrafts.forEach(element => {
+                        let x = {
+                            id: element.id,
+                            subject: element.subject.title,
+                            title: element.title,
+                            startDate: element.startDate,
+                            submissionDate: element.submissionDate
+                        };
+                        this.classesDraft.push(x);
+                    });
+                    response.data.classScheduled.forEach(element => {
+                        let x = {
+                            id: element.id,
+                            subject: element.subject.title,
+                            title: element.title,
+                            startDate: element.startDate,
+                            submissionDate: element.submissionDate
+                        };
+                        this.classes.push(x);
+                    });
+                })
+                .catch(err => {
+                    if (err.message == "Unauthenticated") {
+                        this.flash(
+                            "Your session has ended.  You will be logged out. Please login again to use the System",
+                            "warning"
+                        );
+                        this.$store.dispatch("logout");
+                    }
+                });
+        },
+
+        getFeedback(id) {
+            return this.$router.push({
+                name: "feedback",
+                query: { answer_id: id }
+            });
+        },
+
+        startClass(id) {
+          return this.$router.push({
+            name: "my-class",
+            query: { class_id: id }
+          });
+        },
+
+        startLiveClass(cID) {
+            //this method will start the live class session
+            return this.$router.push({
+              name: "livestream",
+              query: { live_id: cID }
+            });
+        }
+    }
+};
+</script>
+
+<style scoped></style>

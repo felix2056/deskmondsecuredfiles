@@ -1,0 +1,244 @@
+/* Maths */
+.Maths .subject-marker,
+.Maths .badge.badge-subject,
+.badge.Maths{
+    background-color: #EE3638!important;
+    border: none;
+}
+/*Maths end*/
+
+/* English */
+.English .subject-marker,
+.English .badge.badge-subject,
+.badge.English{
+    background-color: #00AFEF!important;
+    border: none;
+}
+/*English end*/
+
+/* French */
+.French .subject-marker,
+.French .badge.badge-subject,
+.badge.French{
+    background-color: #0064E5!important;
+    border: none;
+}
+/*French end*/
+
+/* Science */
+.Science .subject-marker,
+.Science .badge.badge-subject,
+.badge.Science{
+    background-color: #A54399!important;
+    border: none;
+}
+/*Science end*/
+
+/* History-Geography */
+.History-Geography .subject-marker,
+.History-Geography .badge.badge-subject,
+.badge.History-Geography{
+    background-color: #C7E536!important;
+	color: rgba(0,0,0,0.7);
+    border: none;
+}
+/*History-Geography end*/
+
+/* ICT */
+.ICT .subject-marker,
+.ICT .badge.badge-subject,
+.badge.ICT{
+    background-color: #AB69C6!important;
+    border: none;
+}
+/*ICT end*/
+
+/* PSHE */
+.PSHE .subject-marker,
+.PSHE .badge.badge-subject,
+.badge.PHSE{
+    background-color: #D78D29!important;
+    border: none;
+}
+/*PSHE end*/
+
+/* Citizenship */
+.Citizenship .subject-marker,
+.Citizenship .badge.badge-subject,
+.badge.Citizenship{
+    background-color: #E7BC1E!important;
+    border: none;
+		color: rgba(0,0,0,0.6);
+}
+/*Citizenship end*/
+
+/* Moral-Science */
+.Moral-Science .subject-marker,
+.Moral-Science .badge.badge-subject,
+.badge.Moral-Science{
+    background-color: #27CFC1!important;
+    border: none;
+}
+/*Moral-Science end*/
+
+
+/* Art */
+.Art .subject-marker,
+.Art .badge.badge-subject,
+.badge.Art{
+    background-color: #F06B9C!important;
+    border: none;
+}
+/*Art end*/
+
+
+/* Hindi */
+.Hindi .subject-marker,
+.Hindi .btn-primary,
+.badge.Hindi{
+    background-color: #F2623C!important;
+    border: none;
+}
+/*Hindi end*/
+
+
+/*hover btn*/
+.Maths .btn-primary:hover,
+.English .btn-primary:hover,
+.French .btn-primary:hover,
+.Science .btn-primary:hover,
+.History-Geography .btn-primary:hover,
+.ICT .btn-primary:hover,
+.PSHE .btn-primary:hover,
+.Citizenship .btn-primary:hover,
+.Moral-Science .btn-primary:hover,
+.Art .btn-primary:hover,
+.Hindi .btn-primary:hover {
+    filter: grayscale(30%);
+}
+
+/*Format options*/
+#option a.bg-light:hover,
+#option a.bg-light:focus{
+    background-color: #007bff!important;
+    color: white;
+}
+
+.list-input{
+    max-width: 40px;
+}
+
+.minw-13{
+    min-width: 13%;
+}
+
+.minw-33{
+    min-width: 33.33%;
+}
+
+/*TIMELINE*/
+
+.timeline{
+    position: relative;
+}
+
+.timeline-horizontal {
+    width: 90%;
+    margin: auto;
+}
+.timeline .timeline-item .timeline-badge {
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    line-height: 52px;
+    font-size: 14px;
+    background-color: #333;
+    z-index: 100;
+    cursor: pointer;
+    border-top-right-radius: 50%;
+    border-top-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+
+.timeline-horizontal::before {
+    content: "";
+    display: block;
+    background: #ffc107!important;
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    top: calc(50% - 2px);
+}
+
+.slick-current.timeline-item::before {
+    height: 18px;
+    width: 18px;
+    margin-top: -5px;
+    margin-left: -9px; /* Center bullet - Half .slick-current width*/
+   /* border: 3px solid white;*/
+}
+
+/* Arrows */
+.slick-prev,
+.slick-next {
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+    display: block;
+    width: 20px;
+    height: 32px;
+    padding: 0;
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+    cursor: pointer;
+    color: transparent;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:hover,
+.slick-prev:focus,
+.slick-next:hover,
+.slick-next:focus {
+    color: transparent;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:hover:before,
+.slick-prev:focus:before,
+.slick-next:hover:before,
+.slick-next:focus:before {
+    opacity: 1;
+}
+.slick-prev.slick-disabled:before,
+.slick-next.slick-disabled:before {
+    opacity: 0.25;
+}
+.slick-prev:before,
+.slick-next:before {
+    font-size: 32px;
+    line-height: 1;
+    opacity: 0.75;
+    color: #000000;
+    font-family: FontAwesome;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.slick-prev {
+    left: -40px;
+}
+.slick-prev:before {
+    content: "\f104";
+}
+.slick-next {
+    right: -40px;
+}
+.slick-next:before {
+    content: "\f105";
+}
+
+
+

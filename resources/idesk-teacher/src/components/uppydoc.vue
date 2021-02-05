@@ -1,0 +1,167 @@
+<template>
+    <form>
+        <div class="image-container mb-3" v-if="previewPath">
+            <img :src="previewPath" alt="Uploaded Image Preview" />
+        </div>
+        <div class="form-group">
+            <div ref="dashboardContainer"></div>
+        </div>
+    </form>
+</template>
+
+<script>
+import Uppy from "@uppy/core";
+import XHRUpload from "@uppy/xhr-upload";
+import Dashboard from "@uppy/dashboard";
+
+// Import from 3rd party
+import GoogleDrive from "@uppy/google-drive";
+import Dropbox from "@uppy/dropbox";
+import OneDrive from "@uppy/onedrive";
+
+import "@uppy/core/dist/style.css";
+import "@uppy/dashboard/dist/style.css";
+
+export default {
+    props: {
+        maxFileSizeInBytes: {
+            type: Number,
+            required: true
+        },
+
+        classId: {
+            type: Number,
+            required: true
+        }
+    },
+
+    data() {
+        return {
+            payload: null,
+            previewPath: null,
+            disabled: true
+        };
+    },
+
+    mounted() {
+        this.instantiateUppy();
+    },
+
+    methods: {
+        instantiateUppy() {
+            this.uppy = Uppy({
+                debug: true,
+                autoProceed: false,
+                restrictions: {
+                    maxFileSize: this.maxFileSizeInBytes,
+                    minNumberOfFiles: 1,
+                    maxNumberOfFiles: 10,
+                    allowedFileTypes: [
+                        "application/msword",
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        "application/pdf"
+                    ]
+                },
+                note: "Documents only please..",
+                meta: {
+                    id: 0
+                },
+                onBeforeFileAdded: () => {
+                    uppy.setMeta({id: this.classId});
+                }
+            })
+                .use(Dashboard, {
+                    hideUploadButton: false,
+                    inline: true,
+                    height: 350,
+                    target: this.$refs.dashboardContainer,
+                    replaceTargetContent: true,
+                    showProgressDetails: true,
+                    browserBackButtonClose: true
+                })
+                .use(GoogleDrive, { 
+                    target: Dashboard, 
+                    companionUrl: 'https://companion.uppy.io' 
+                })
+                .use(Dropbox, { 
+                    target: Dashboard, 
+                    companionUrl: 'https://companion.uppy.io' 
+                })
+                .use(OneDrive, { 
+                    target: Dashboard, 
+                    companionUrl: 'https://companion.uppy.io' 
+                })
+                .use(XHRUpload, {
+                    limit: 10,
+                    // endpoint: 'http://lwmv3-gat.test/api/uploadDocs',
+                    endpoint: "/api/uploadDocs",
+                    formData: true,
+                    fieldName: "file",
+                    metafields: ["name", "id"],
+                    withCredentials: true,
+                    headers: {
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"), // from <meta name="csrf-token" content="{{ csrf_token() }}">
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                });
+
+            this.uppy.on("complete", event => {
+                if (event.successful[0] !== undefined) {
+                    this.payload = event.successful[0].response.body.path;
+
+                    this.disabled = false;
+                }
+            });
+        },
+
+        updatePreviewPath({ path }) {
+            this.previewPath = path;
+
+            return this;
+        },
+
+        resetUploader() {
+            this.uppy.reset();
+            this.disabled = true;
+
+            return this;
+        },
+
+        confirmUpload() {
+            if (this.payload) {
+                this.disabled = true;
+                // axios.post('/store', { file: this.payload })
+                //     .then(({ data }) => {
+                //         this.updatePreviewPath(data)
+                //             .resetUploader()
+                //             .flash('Upload Successful!','success');
+                //     })
+                //     .catch(err => {
+                //         console.error(err);
+                //         this.resetUploader();
+                //     })
+                // ;
+                // } else flash(`You don't have any file in processing`,'warning');
+            }
+        }
+    }
+};
+</script>
+
+<style scoped>
+.image-container {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.image-container > img {
+    width: inherit;
+    height: inherit;
+}
+</style>
